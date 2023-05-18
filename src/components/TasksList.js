@@ -1,31 +1,23 @@
-import React,{useEffect, useState} from "react";
+import React,{useContext, useState} from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import MyVerticallyCenteredModal from './UpdateTask';
-import { useSelector, useDispatch } from 'react-redux';
-import { setSelectedTask,removeTaskFromList, getTasksFromServer, deleteTaskFromServer } from "../slices/tasksSlice";
+import { TasksContext } from "../context/TasksContext";
 
 const TasksList = () => {
-  const {tasksList} = useSelector((state) => state.tasks)
-  const dispatch = useDispatch()
+
+  const{state,dispatch} = useContext(TasksContext)
+  const {tasksList} = state
 
   const updateTask = (task) => {
     console.log("update Task");
     setModalShow(true)
-    dispatch(setSelectedTask(task))
+    dispatch({type:'SET_SELECTED_TASK',payload:task})
   };
-
-  useEffect(()=>{
-      dispatch(getTasksFromServer())
-  },[dispatch])
 
   const deleteTask = (task) => {
     console.log("delete task");
-    dispatch(deleteTaskFromServer(task))
-    .unwrap()
-    .then(() =>{
-      dispatch(removeTaskFromList(task))
-    })
+    dispatch({type:'REMOVE_TASK',payload:task})
   };
 
   const [modalShow,setModalShow] = useState(false)
@@ -34,20 +26,22 @@ const TasksList = () => {
       <Table striped bordered hover>
         <thead>
           <tr className="text-center">
-            <th>#</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Actions</th>
+            <th>No.</th>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>MOBILE</th>
+            <th>ACTIONS</th>
           </tr>
         </thead>
         <tbody>
           {
-            tasksList && tasksList.map((task,index) => {
-              return (
-                <tr className="text-center" key={task.id}>
-                <td>{index + 1}</td>
-                <td>{task.title}</td>
-                <td>{task.description}</td>
+            tasksList && tasksList.map((task,index) =>{
+              return(
+                <tr className="text-center" keys = {task.no}>
+                <td>{index+1}</td>
+                <td>{task.id}</td>
+                <td>{task.name}</td>
+                <td>{task.number}</td>
                 <td>
                   <Button
                     variant="primary"

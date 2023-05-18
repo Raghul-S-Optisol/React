@@ -1,7 +1,12 @@
 .App {
   text-align: center;
 }
-
+.text-color {
+  color: rgb(183, 0, 255);
+}
+.submit-color {
+  color: rgb(51, 255, 0);
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
